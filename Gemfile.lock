@@ -152,7 +152,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   mysql2
-  nokogiri (~> 1.6.2.1)
+  nokogiri (= 1.6.2.1)
   pry
   rails (= 4.1.2.rc1)
   rails3-generators
