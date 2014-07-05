@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @medium.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @medium.description %>
+</p>
+
+<p>
+  <strong>Asset file name:</strong>
+  <%= @medium.asset_file_name %>
+</p>
+
+<p>
+  <strong>Asset content type:</strong>
+  <%= @medium.asset_content_type %>
+</p>
+
+<p>
+  <strong>Asset file size:</strong>
+  <%= @medium.asset_file_size %>
+</p>
+
+
+<p>
+  <img src="<%= @medium.asset_url%>" style="width:200px;height:200px" />
+
+</p>
+<%= link_to 'Edit', edit_medium_path(@medium) %> |
+<%= link_to 'Back', media_path %>

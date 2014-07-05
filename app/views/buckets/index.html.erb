@@ -1,0 +1,29 @@
+<h1>Listing buckets</h1>
+
+<p id="notice"><%= notice %></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @buckets.each do |bucket| %>
+      <tr>
+        <td><%= bucket.name %></td>
+        <td><%= link_to 'Show', bucket_path(bucket.name) %></td>
+        <td><%= link_to 'Destroy', "/delete_bucket/#{bucket.name}", data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Bucket', new_bucket_path %>
+<br>
+<br>
+<%= link_to 'Back', root_path %>

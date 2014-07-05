@@ -1,0 +1,29 @@
+<h1>Listing Tables</h1>
+
+<p id="notice"><%= notice %></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Table Names: </th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @dynamotables.each do |table| %>
+      <tr>
+        <td><%= table.name %></td>
+        <td><%= link_to 'Show', "/show_item/#{table.name}" %></td>
+        <td><%= link_to 'Destroy', "/delete_table/#{table.name}", data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Table', new_dynamotable_path %>
+<br>
+<br>
+<%= link_to 'Back', root_path %>

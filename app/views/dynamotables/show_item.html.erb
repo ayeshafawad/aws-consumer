@@ -1,0 +1,57 @@
+<p id="notice"><%= notice %></p>
+  
+
+<table>
+  <thead>
+    <strong>Table Name: </strong>  <%= @dynamotable.name %> 
+  </thead>
+
+  <tbody>
+    <br>
+    <br>
+    <tr>
+      <strong>Items: </strong> <br>
+      <% @items.each do |item| %>
+        <tr>
+         ID: <%= item.hash_value %>  &nbsp;&nbsp;&nbsp; COLOR:  <%= item.attributes["color"] %> 
+                  &nbsp;&nbsp;&nbsp;  RANGE: <%= item.range_value %>   <br> 
+        </tr>
+      <% end %>
+    </tr>
+    <br>
+       <%= link_to 'New Item', "/new_item/#{@dynamotable.name}" %>
+    <br>
+       <%= link_to 'Batch Write Items', "/batch_item/#{@dynamotable.name}" %>   
+    <br>
+       <%= link_to 'Update Items', "/update_item/#{@dynamotable.name}" %>
+    <br>
+      <%= link_to 'Delete Items', "/delete_item/#{@dynamotable.name}" %>
+    <br>
+      <%= link_to 'Query Items', "/query_item/#{@dynamotable.name}" %>
+    <br>
+      <%= link_to 'Scan Items', "/scan_item/#{@dynamotable.name}" %>
+    <br>
+    <br>
+    <strong>Provisioned Throughput: </strong> <br>
+      <tr> ReadCapacityUnits: <%= @rcu %>  </tr> <br>
+      <tr> WriteCapacityUnits: <%= @wcu %>  </tr> <br>
+      <tr> NumberOfDecreasesToday: <%= @ndt %>  </tr>
+    <br>
+    <br>
+      <strong>Table Description: </strong> <br>
+      <tr>
+        <%= @table_description.inspect %> 
+      </tr>
+
+  </tbody>
+
+<br>
+<br>
+  <%= link_to 'Update Provisioned Throughput (RCU: 7, WCU: 7)', "/update_provisioned_throughput/#{@dynamotable.name}" %>
+
+
+<br>
+<br>
+  <%= link_to 'Back', dynamotables_path %>
+</table>  
+  

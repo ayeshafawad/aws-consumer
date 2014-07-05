@@ -1,0 +1,46 @@
+<p id="notice"><%= notice %></p>
+  
+
+  <table>
+  <thead>
+    <strong>Bucket Name: </strong>  <%= @bucket.name %> 
+  </thead>
+
+  <tbody>
+  	<br><br>  
+  	<strong>Items: </strong>
+  	<% @objects.each do |item| %>
+  		<% item.metadata['content-type'] = 'application/json' %>
+      <tr>	
+        <td><%= item.key %></td>
+		<td><%= link_to 'Destroy', "/delete_item/#{@bucket.name}/#{item.key}", data: { confirm: 'Are you sure?' } %></td>
+		<td><%= link_to 'View/URL', "#{item.url_for(:read)}" %></td> <%# List the resource URL for an object %>
+		<td><%= link_to 'Show Item Details', "/show_item/#{@bucket.name}/#{item.key}" %></td>
+    <% end %>
+  </tbody>
+</table>
+<br>
+<table>
+   <tbody>  
+     	<strong>Policy: </strong>	
+     <tr>
+     	<td> <%= @policy %> </td>
+     </tr>
+   </tbody>  
+</table>
+
+
+<%-# link_to 'New Item', "/new_item/#{@bucket.name}" %>
+<%-# link_to 'New Item', "/buckets/#{@bucket.name}/new" %>
+<br>
+<%= link_to "Versioning ON/OFF", "/enable_versioning/#{@bucket.name}"  %>  
+<br>
+<%= link_to "Test Versioning", "/test_item_versions/#{@bucket.name}"  %>  
+<br>
+<%= link_to "New Item", new_bucket_item_path(bucket_id: @bucket.name) %>  
+<br>
+<%= link_to 'Back', buckets_path %>
+
+
+
+

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+  
+
+<table>
+  <thead>
+    <strong>Scan Result on Table: </strong>  <%= @dynamotable.name %> 
+  </thead>
+
+  <tbody>
+    <br>
+    <br>
+    <tr>
+      <strong>Items: </strong> <br>
+      <% @results.each do |item| %>
+        <tr>
+         ID: <%= item.item.hash_value %>   &nbsp;&nbsp;&nbsp; COLOR:  <%= item.item.attributes["color"] %> 
+                &nbsp;&nbsp;&nbsp;  RANGE: <%= item.item.range_value %>  <br> 
+        </tr>
+      <% end %>
+    </tr>
+
+  </tbody>
+
+<br>
+<br>
+  <%= link_to 'Back', "/show_item/#{@dynamotable.name}" %>
+
+</table>  
+  

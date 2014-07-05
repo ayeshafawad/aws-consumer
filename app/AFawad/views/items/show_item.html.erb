@@ -1,0 +1,40 @@
+
+<table>
+   <tbody>
+   		<strong>Storage Class:</strong>	
+     <tr>
+       <% if @storage_class_standard %>
+       	   <%= "STANDARD" %> 
+       	   <%= link_to 'change to Reduced Redundancy', "/change_storage_class/#{@bucket}/#{sanitize_key(@object.key)}/true" %>
+       <% else %>
+	   	   <%= "REDUCED_REDUNDANCY" %>
+	   	   <%= link_to 'change to Standard', "/change_storage_class/#{@bucket}/#{sanitize_key(@object.key)}/false" %>
+	   <% end %>    
+     </tr>  
+     <br>
+     <br>
+     	<strong>Metadata: </strong>	
+     <tr>
+     	<%= @metadata %> 
+     </tr>
+     <br>
+     <br>
+     	<strong>Versions: </strong>	<br>
+     <tr>
+     	<%# cList the versions of an object %>
+     	<%# List the versions of an object showing the deletion of selected versions %>
+     	<%= @object.versions.each do |obj_version| %>
+  			VERSION KEY:  <%= obj_version.key %> &nbsp; 
+  			VERSION ID:  <%= obj_version.version_id %> 
+  			<br>
+		<% end %>		
+     </tr>	
+
+   </tbody>  
+</table>
+
+
+<%= link_to 'Delete Odd Versions', "/delete_odd_versions/#{@bucket}/#{@object.key}" %>
+<br>
+<br>
+<%= link_to 'Back', bucket_path(params[:bucket]) %>

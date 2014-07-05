@@ -1,0 +1,12 @@
+<%= form_tag("/attempt_email/") do %>
+
+  <div>
+      <h3> Email: </h3> 
+      <%= email_field_tag :email %>
+  </div>
+
+  <br>
+  <%= submit_tag "Send Email" %>
+  <br>
+
+<% end %>

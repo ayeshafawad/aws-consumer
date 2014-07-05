@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email: MyString
+  password: MyString
+  aws_key_id: MyString
+  aws_sa_key: MyString
+  aws_region: MyString
+
+two:
+  email: MyString
+  password: MyString
+  aws_key_id: MyString
+  aws_sa_key: MyString
+  aws_region: MyString

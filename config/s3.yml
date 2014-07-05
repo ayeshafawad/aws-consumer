@@ -1,0 +1,19 @@
+defaults: &defaults
+	access_key_id: ENV["S3_ACCESS_KEY"] 
+	secret_access_key: ENV["S3_SECRET_KEY"] 
+
+development:
+	<<: *defaults
+	bucket: S3_ayesha_bucket
+
+test:
+	<<: *defaults
+	bucket: S3_ayesha_bucket
+
+staging:
+	<<: *defaults
+	bucket: S3_ayesha_bucket
+
+production:
+	<<: *defaults
+	bucket: S3_ayesha_bucket
