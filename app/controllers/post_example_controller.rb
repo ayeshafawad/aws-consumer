@@ -18,16 +18,16 @@ class PostExampleController < ActionController::Base
     uri.port = Net::HTTP.https_default_port()
     puts "URI port: #{uri.port}"
     puts "URI host: #{uri.host}"
-    http = Net::HTTP.new(uri.host, uri.port).start 
+    #http = Net::HTTP.new(uri.host, uri.port).start 
     #response = http.request(http_request)
     #puts "Response:\n #{response}"
 
-    # response_received = Net::HTTP.new(uri.host, uri.port).start 
-    # do |http|
-    #   http.use_ssl = true
-    #   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    #   post http.request(http_request)
-    # end
+    response_received = Net::HTTP.new(uri.host, uri.port).start 
+    do |http|
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      response =  response_received.request(http_request)
+    end
 
     puts "Response code received from endpoint:\n #{response_received.code}"
     puts "Response body received from endpoint:\n #{response_received.body.presence}"
