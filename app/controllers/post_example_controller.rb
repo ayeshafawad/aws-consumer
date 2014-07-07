@@ -15,7 +15,10 @@ class PostExampleController < ActionController::Base
     puts "Parsing URI into: #{uri.host}"
     http_request = Net::HTTP::Post.new(uri.path, nil)
     puts "HTTP request created" if http_request
+    uri.port = Net::HTTP.https_default_port()
+    puts "URI: #{uri.port}"
     response_received = Net::HTTP.new(uri.host, uri.port).start do |http|
+      puts "in loop"
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       http.request(http_request)
