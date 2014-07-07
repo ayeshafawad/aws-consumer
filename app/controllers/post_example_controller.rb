@@ -13,14 +13,19 @@ class PostExampleController < ActionController::Base
     puts "Send request to outbound URL: #{confirmation_url}"
     uri = URI.parse confirmation_url
     puts "Parsing URI into: #{uri.host}"
-    http_request = Net::HTTP::Post.new(uri.path, nil)
+    http_request = Net::HTTP::Post.new(uri.request_uri)
     puts "HTTP request created" if http_request
     uri.port = Net::HTTP.https_default_port()
     puts "URI port: #{uri.port}"
     puts "URI host: #{uri.host}"
     http = Net::HTTP.new(uri.host, uri.port).start 
+    #request = Net::HTTP::Post.new(uri.request_uri)
+
     #response = http.request(http_request)
-    response = http.request(Net::HTTP::Get.new(uri.request_uri))
+    #response = http.request(Net::HTTP::Get.new(uri.request_uri))
+    
+
+    response = http.request(http_request)
     puts "Response:\n #{response}"
 
     # response_received = Net::HTTP.new(uri.host, uri.port).start 
