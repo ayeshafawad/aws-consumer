@@ -3,9 +3,20 @@ require "net/https"
 class PostExampleController < ActionController::Base
 
   def create
+
     received_body = JSON.parse request.body.read.to_s.strip
     received_message_type = received_body["Type"]
     puts "Received body: #{received_body}" unless received_body.blank?
+
+    if received_message_type == "Notification"
+        message_subject = received_body["Subject"]
+        message_received = received_body["Message"]
+        message_id = received_body["MessageId"]
+        puts "Message received from AWS Topic. Id:#{message_id}, Subject:#{message_subject}, Message:#{message_received}"
+       unless message_subject.blank? && message_received.blank? && message_id.blank?
+         puts "Message received from AWS Topic. Id:#{message_Id}, Subject:#{message_subject}, Message:#{message_received}"
+       end
+     end
 
     received_token = received_body["Token"] unless received_body.blank?   
     topic_arn = received_body["TopicArn"] unless received_body.blank?   
