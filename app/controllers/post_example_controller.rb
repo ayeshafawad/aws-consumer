@@ -6,10 +6,6 @@ class PostExampleController < ActionController::Base
     received_body = JSON.parse request.body.read.to_s.strip
     puts "Received body: #{received_body}" unless received_body.blank?
 
-    received_header = JSON.parse request.header.read.to_s.strip
-    puts "Received header: #{received_header}" unless received_header.blank?
-
-
     received_token = received_body["Token"] unless received_body.blank?   
     topic_arn = received_body["TopicArn"] unless received_body.blank?   
     puts "Received token: #{received_token}" unless received_token.blank?
