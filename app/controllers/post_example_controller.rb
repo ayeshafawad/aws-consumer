@@ -1,10 +1,9 @@
 require "net/https"
+require "uri"
 
 class PostExampleController < ActionController::Base
 
   def create
-    notification = Hashie::Mash.new JSON.parse(request.raw_post)
-    puts "#{notification}"
     received_body = JSON.parse request.body.read.to_s.strip
     puts "Received body: #{received_body}" unless received_body.blank?
     received_token = received_body["Token"] unless received_body.blank?   
@@ -20,11 +19,17 @@ class PostExampleController < ActionController::Base
     uri.port = Net::HTTP.https_default_port()
     puts "URI port: #{uri.port}"
     puts "URI host: #{uri.host}"
-    response_received = Net::HTTP.new(uri.host, uri.port).start do |http|
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      post http.request(http_request)
-    end
+    http = Net::HTTP.new(uri.host, uri.port)
+    response = http.request(Net::HTTP::Get.new(uri.request_uri))
+    puts "Response:\n #{response}"
+
+    # response_received = Net::HTTP.new(uri.host, uri.port).start 
+    # do |http|
+    #   http.use_ssl = true
+    #   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    #   post http.request(http_request)
+    # end
+
     puts "Response code received from endpoint:\n #{response_received.code}"
     puts "Response body received from endpoint:\n #{response_received.body.presence}"
     render :confirm, status: :ok
