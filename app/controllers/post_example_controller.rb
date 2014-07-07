@@ -4,7 +4,7 @@ class PostExampleController < ActionController::Base
 
   def create
     received_body = JSON.parse request.body.read.to_s.strip
-    #puts "Received body: #{received_body}" unless received_body.blank?
+    puts "Received body: #{received_body}" unless received_body.blank?
 
     received_message_type = received_body["Type"]
     if received_message_type == "SubscriptionConfirmation"
