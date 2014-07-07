@@ -8,6 +8,14 @@ class PostExampleController < ActionController::Base
     received_message_type = received_body["Type"]
     puts "Received body: #{received_body}" unless received_body.blank?
 
+    message_subject = received_body["Subject"]
+        message_received = received_body["Message"]
+        message_id = received_body["MessageId"]
+        puts "Message received from AWS Topic. Id:#{message_id}, Subject:#{message_subject}, Message:#{message_received}"
+       unless message_subject.blank? && message_received.blank? && message_id.blank?
+         puts "Message received from AWS Topic. Id:#{message_Id}, Subject:#{message_subject}, Message:#{message_received}"
+       end
+       
     if received_message_type == "Notification"
         message_subject = received_body["Subject"]
         message_received = received_body["Message"]
