@@ -19,7 +19,8 @@ class PostExampleController < ActionController::Base
     puts "URI port: #{uri.port}"
     puts "URI host: #{uri.host}"
     http = Net::HTTP.new(uri.host, uri.port).start 
-    response = http.request(http_request)
+    #response = http.request(http_request)
+    response = http.request(Net::HTTP::Get.new(uri.request_uri))
     puts "Response:\n #{response}"
 
     # response_received = Net::HTTP.new(uri.host, uri.port).start 
