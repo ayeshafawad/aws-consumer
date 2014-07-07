@@ -1,5 +1,4 @@
 require "net/https"
-require "uri"
 
 class PostExampleController < ActionController::Base
 
