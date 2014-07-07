@@ -6,7 +6,7 @@ class PostExampleController < ActionController::Base
     received_body = JSON.parse request.body.read.to_s.strip
     puts "Received body: #{received_body}" unless received_body.blank?
 
-    unless received_body.blank? 
+    #unless received_body.blank? 
       
       received_token = received_body["Token"]   
       topic_arn = received_body["TopicArn"] 
@@ -37,11 +37,11 @@ class PostExampleController < ActionController::Base
       message_subject = received_body["Subject"]
       message_received = received_body["Message"]
       message_id = received_body["MessageId"]
-      unless message_subject.blank? && message_received.blank? && message_id.blank?
+      #unless message_subject.blank? && message_received.blank? && message_id.blank?
         puts "Message received from AWS Topic. Id:#{message_Id}, Subject:#{message_subject}, Message:#{message_received}"
-      end
+      #end
 
-    end
+    #end
     render :nothing, status: :ok
   end  
 end
