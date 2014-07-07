@@ -12,7 +12,9 @@ class PostExampleController < ActionController::Base
     confirmation_url = "https://sns.us-east-1.amazonaws.com/?Action=ConfirmSubscription&TopicArn=#{topic_arn}&Token=#{received_token}"
     puts "Send request to outbound URL: #{confirmation_url}"
     uri = URI.parse confirmation_url
+    puts "Parsing URI into: #{uri.host}"
     http_request = Net::HTTP::Post.new(uri.path, nil)
+    puts "HTTP request created" if http_request
     response_received = Net::HTTP.new(uri.host, uri.port).start do |http|
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
