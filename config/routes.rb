@@ -53,6 +53,12 @@ Rails.application.routes.draw do
   get 'delete_user/:name/:username',           to: 'iams#delete_user'
   get 'delete_users/',                         to: 'iams#delete_users'
   get 'add_users/:name',                       to: 'iams#add_users'
+  get 'delete_policy/:name',                   to: 'iams#delete_policy'
+  get 'create_policy_s3/:name',                to: 'iams#create_policy_s3'
+  get 'create_policy_role_EC2/',               to: 'iams#create_policy_role_EC2'
+  get 'delete_role_EC2/',                      to: 'iams#delete_role_EC2'
+  get 'delete_policy_EC2/',                    to: 'iams#delete_policy_EC2'
+  
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -29,7 +29,10 @@
    
 
   </tbody>
-<br>
+<%= link_to 'Create and Add a Policy (Read-Write S3)', "/create_policy_s3/#{@group.name}" %>  
+<br><br>
+<%= link_to 'Remove Policy (Read-Write S3)', "/delete_policy/#{@group.name}" %>  
+<br><br>
 <%= link_to 'Add 2 users to this Group', "/add_users/#{@group.name}" %>
 
 <br><br><br>

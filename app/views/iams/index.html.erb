@@ -6,7 +6,6 @@
   <thead>
     <tr>
       <th>Group Names</th>
-      <th colspan="3"></th>
     </tr>
   </thead>
 
@@ -18,27 +17,41 @@
         <td><%= link_to 'Destroy', iam, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
-
-    <tr>
+   <tr>
       <th>User Names</th>
-      <th colspan="3"></th>
     </tr>
     <% @users.each do |user| %>
       <tr>
         <td><%= user.name %></td>
-        <td><%= link_to 'Show', "/show_group/#{user.name}" %></td>
       </tr>
     <% end %>
-<br>
+
+   <tr>
+      <th>Roles</th>
+    </tr>
+    <% @roles.each do |role| %>
+      <tr>
+        <td><%= role.id2name %></td>
+        <td><%= link_to 'Policy', "/show_role_policy/#{role}" %></td>
+      </tr>
+    <% end %> 
+
   </tbody>
 </table>
-<br>
+<br><br>
+
+<%= link_to 'New Group', new_iam_path %><br><br>
+
 <%= link_to 'Create 1st User: Ayesha', "/create_users/#{"Admin"}/#{"Ayesha"}" %> <br>
 <%= link_to 'Create 2nd User: John', "/create_users/#{"Admin"}/#{"John"}" %> <br>
 <%= link_to 'Create 3rd User: Fawad', "/create_users/#{"Admin"}/#{"Fawad"}" %> <br>  <br>
 
 <%= link_to 'Delete All Users', "/delete_users" %> <br>  <br>
 <%= link_to 'Delete 3rd User (not in group)', "/delete_user/#{"Admin"}/#{"John"}" %> <br>  <br>
-<br>
 
-<%= link_to 'New Group', new_iam_path %>
+<%= link_to 'Create and Add a Policy, Role (Launch-Terminate EC2)', "/create_policy_role_EC2" %>  <br>  <br>
+
+<%= link_to 'Delete Policy from Role (Launch-Terminate EC2)', "/delete_policy_EC2" %>  <br>  <br>
+
+<%= link_to 'Delete Role (Launch-Terminate EC2)', "/delete_role_EC2" %>  
+<br>

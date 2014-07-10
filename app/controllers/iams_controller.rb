@@ -6,6 +6,7 @@ class IamsController < ApplicationController
   def index
     @iams = $iam.groups.map{ |x| Iam.new(name: x.name) } 
     @users = $iam.users
+    @roles = $iam.client.list_roles   
   end
 
   # GET /iams/1
@@ -49,6 +50,15 @@ class IamsController < ApplicationController
     group_name = params[:name]
     @group = $iam.groups[group_name]
     @users = @group.users
+    @policies = @group.policies
+  end  
+
+  # ---------------------------------
+  #  List all Groups and its Users
+  # ---------------------------------
+  def show_role_policy
+    role_name = params[:name]
+    @policy = $iam.client.list_role_policies(:role_name => role_name)
   end  
 
   # -----------------
@@ -82,27 +92,28 @@ class IamsController < ApplicationController
       if @group.exists? # check if group already exists, then add user
         @group.users.add($iam.users["Ayesha"])
         @group.users.add($iam.users["Fawad"])
-        format.html { redirect_to iams_path, notice: 'User is added.' }
+        format.html { redirect_to "/show_group/#{@group.name}", notice: 'User is added.' }
       else
-        format.html { redirect_to iams_path, notice: 'Error' }
+        format.html { redirect_to "/show_group/#{@group.name}", notice: 'Error' }
       end
     end
 
   end
+
 
   # --------------------------
   #  Create a Policy for S3
   # --------------------------
   def create_policy_s3
 
+    @group = $iam.groups[params[:name]]
+
     AWS.config(
         :access_key_id => ENV["S3_ACCESS_KEY"], 
         :secret_access_key => ENV["S3_SECRET_KEY"])
 
     # naming policy 
-    role_name = 's3-read-write'
-    policy_name = 's3-read-write'
-    profile_name = 's3-read-write'   
+    policy_name = 's3-read-write' 
 
     # building a custom policy 
     policy = AWS::IAM::Policy.new
@@ -110,41 +121,19 @@ class IamsController < ApplicationController
       :actions => ["s3:Read*","s3:Write*","s3:Get*","s3:List*"], 
       :resources => '*')
 
-    # EC2 can generate session credentials
-    assume_role_policy_document = '{"Version":"2008-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":["ec2.amazonaws.com"]},"Action":["sts:AssumeRole"]}]}'
-   
-    # creating a role
-    $iam.client.create_role(
-      :role_name => role_name,
-      :assume_role_policy_document => assume_role_policy_document)
-
     # adding policy to role
-    $iam.client.put_role_policy(
-      :role_name => role_name,
+    $iam.client.put_group_policy(
+      :group_name => group.name,
       :policy_name => policy_name,
       :policy_document => policy.to_json)
 
-    # creating a profile for the role
-    $response = $iam.client.create_instance_profile(
-      :instance_profile_name => instance_profile_name)
-     
-    # ARN
-    $profile_arn = response[:instance_profile][:arn]
-     
-    $iam.client.add_role_to_instance_profile(
-      :instance_profile_name => instance_profile_name,
-      :role_name => role_name)
-
-    # you can use the profile name or ARN as the :iam_instance_profile option
-    $ec2 = AWS::EC2.new
-    $ec2.instances.create(:image_id => "inst_id_1", :iam_instance_profile => profile_name)
-
+    redirect_to "/show_group/#{@group.name}", notice: 'Added s3-read-write policy to the Group'
   end
 
-  # --------------------------
-  #  Create a Policy for EC2
-  # --------------------------
-  def create_policy_ec2
+  # ----------------------------------
+  #  Create a Policy and Role for EC2
+  # ----------------------------------
+  def create_policy_role_EC2
 
     AWS.config(
         :access_key_id => ENV["S3_ACCESS_KEY"], 
@@ -153,7 +142,8 @@ class IamsController < ApplicationController
     # naming policy 
     role_name = 'ec2-start-stop'
     policy_name = 'ec2-start-stop'
-    profile_name = 'ec2-start-stop'   
+    profile_name = 'ec2-start-stop' 
+    instance_profile_name = 'inst-ec2-start-stop' 
 
     # building a custom policy 
     policy = AWS::IAM::Policy.new
@@ -176,11 +166,11 @@ class IamsController < ApplicationController
       :policy_document => policy.to_json)
 
     # creating a profile for the role
-    $response = $iam.client.create_instance_profile(
+    response = $iam.client.create_instance_profile(
       :instance_profile_name => instance_profile_name)
      
     # ARN
-    $profile_arn = response[:instance_profile][:arn]
+    profile_arn = response[:instance_profile][:arn]
      
     $iam.client.add_role_to_instance_profile(
       :instance_profile_name => instance_profile_name,
@@ -190,27 +180,62 @@ class IamsController < ApplicationController
     $ec2 = AWS::EC2.new
     $ec2.instances.create(:image_id => "ami-inst-id-1", :iam_instance_profile => profile_name)
 
+    redirect_to iams_path, notice: 'Added Policy and Role for EC2'
+  
   end
 
-  # ---------------------------
-  #  Delete a Policy from Role
-  # ---------------------------
-
+  # ----------------------------
+  #  Delete a Policy from Group
+  # ----------------------------
   def delete_policy
 
+    group = $iam.groups[params[:name]]
+
+    AWS.config(
+        :access_key_id => ENV["S3_ACCESS_KEY"], 
+        :secret_access_key => ENV["S3_SECRET_KEY"])
+
+    policy_name = 's3-read-write' 
+
+    $iam.client.delete_group_policy(
+      :group_name => group.name,
+      :policy_name => policy_name)
+
+    redirect_to "/show_group/#{group.name}", notice: 'Deleted s3-read-write policy from the Group'
+  
   end
 
 
   # -------------
   #  Delete Role
   # -------------
+  def delete_role_EC2
+    instance_profile_name = 'inst-ec2-start-stop'
+    role_name = 'ec2-start-stop'
+    $iam.client.remove_role_from_instance_profile(
+        :instance_profile_name => instance_profile_name,
+        :role_name => role_name)
+    $iam.client.delete_instance_profile(:instance_profile_name => instance_profile_name) 
+    $iam.client.delete_role(:role_name => role_name)
+    
+    redirect_to iams_path, notice: 'Deleted Role: ec2-start-stop' 
+  end
 
-  def delete_role
-    $iam.client.delete_role('ec2-start-stop')
-    $iam.client.delete_role('s3-read-write')
+  # ---------------------------
+  #  Delete a Policy from Role
+  # ---------------------------
+  def delete_policy_EC2
+    $iam.client.delete_role_policy(
+        :role_name => 'ec2-start-stop',
+        :policy_name => 'ec2-start-stop')
+    
+    redirect_to iams_path, notice: 'Deleted Role: ec2-start-stop' 
   end
 
 
+  # -------------
+  #  Delete User
+  # -------------
   def delete_user
 
     @user = $iam.users[params[:username]]
