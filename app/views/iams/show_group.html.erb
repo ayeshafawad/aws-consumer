@@ -1,0 +1,38 @@
+<p id="notice"><%= notice %></p>
+  
+
+<table>
+  <thead>
+    <strong>Group Name: </strong>  <%= @group.name %> 
+  </thead>
+
+  <tbody>
+    <br>
+    <br>
+     <tr>
+      <strong>Users: </strong> <br>
+      <% @users.each do |user| %>
+        <tr>
+            &nbsp;&nbsp;&nbsp; <%= user.name %> <br>
+        </tr>
+      <% end %> <br><br>
+    </tr>
+
+    <tr>
+      <strong>Policies: </strong> <br>
+      <% @policies.each do |policy| %>
+        <tr>
+            &nbsp;&nbsp;&nbsp; <%= policy %> <br>
+        </tr>
+      <% end %> <br><br>
+    </tr>
+   
+
+  </tbody>
+<br>
+<%= link_to 'Add 2 users to this Group', "/add_users/#{@group.name}" %>
+
+<br><br><br>
+  <%= link_to 'Back', iams_path %>
+</table>  
+  

@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
-  resources :policies
+  
+  resources :iams, except: [:edit, :update]
 
-  resources :emails, except: [:delete, :edit, :update]
+  resources :policies
+  resources :media
 
   resources :buckets, except: [:delete, :edit, :update] do
     resources :items, except: [:delete, :edit, :update] do
@@ -11,6 +13,15 @@ Rails.application.routes.draw do
       #get 'new_item/:bucket',            to: 'items#new_item'
     end
   end
+
+  resources :users
+
+  resources :dynamotables, except: [:delete, :edit, :update]
+
+  resources :emails, except: [:delete, :edit, :update]
+
+  #resources :iams, except: [:delete, :edit, :update]
+
   get 'enable_versioning/:bucket',              to: 'buckets#enable_versioning'
   get 'delete_item/:bucket/:item',              to: 'items#delete_item'
   get 'show_item/:bucket/:item',                to: 'items#show_item'
@@ -23,11 +34,9 @@ Rails.application.routes.draw do
   post 'update_email',                          to: 'emails#update_email' 
   get 'send_email/:email',                      to: 'emails#send_email' 
   post 'attempt_email/',                        to: 'emails#attempt_email' 
-
-  resources :dynamotables, except: [:delete, :edit, :update]
-  get 'delete_table/:name',                    to: 'dynamotables#delete_table'
-  get 'show_item/:name',                       to: 'dynamotables#show_item'
-  get 'update_provisioned_throughput/:name',   to: 'dynamotables#update_provisioned_throughput'
+  get 'delete_table/:name',                     to: 'dynamotables#delete_table'
+  get 'show_item/:name',                        to: 'dynamotables#show_item'
+  get 'update_provisioned_throughput/:name',    to: 'dynamotables#update_provisioned_throughput'
   get 'new_item/:name',                        to: 'dynamotables#new_item'
   get 'update_item/:name',                     to: 'dynamotables#update_item'
   get 'delete_item/:name',                     to: 'dynamotables#delete_item'
@@ -35,15 +44,16 @@ Rails.application.routes.draw do
   get 'query_item/:name',                      to: 'dynamotables#query_item'
   get 'scan_item/:name',                       to: 'dynamotables#scan_item'
 
-  resources :media
-
-  resources :users
-
   root "home#index"
 
   post 'postExample', :to => 'post_example#create'
 
-  
+  get 'show_group/:name',                      to: 'iams#show_group'
+  get 'create_users/:name/:username',          to: 'iams#create_users'
+  get 'delete_user/:name/:username',           to: 'iams#delete_user'
+  get 'delete_users/',                         to: 'iams#delete_users'
+  get 'add_users/:name',                       to: 'iams#add_users'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
